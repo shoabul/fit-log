@@ -2,6 +2,7 @@
 
 import Link from 'next/link';
 import React, { useState } from 'react';
+import Image from 'next/image';
 
 
 const Nav = () => {
@@ -12,16 +13,19 @@ const Nav = () => {
             <div className="mx-auto grid h-full w-full grid-cols-3 items-center px-20">
 
                 <Link href="/">
-                    <div>
-                        <h1 className="text-base font-bold tracking-wide text-white">
+                    <div className="flex items-center gap-2 ">
+
+                        <Image href="/" src="/logo.png" alt="FitLog Logo" width={24} height={24} className="" />
+
+                        <span className="font-bold tracking-wider text-white uppercase text-base">
                             FITLOG
-                        </h1>
+                        </span>
                     </div>
                 </Link>
 
 
                 <div className="flex items-center justify-center gap-1">
-                    <Link href="/">
+                    <Link href="/workouts">
                         <button
                             onClick={() => setActiveMenu("workouts")}
                             className={`rounded-full px-4 py-1.5 text-xs font-medium transition ${activeMenu === "workouts"
