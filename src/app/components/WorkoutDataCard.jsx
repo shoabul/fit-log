@@ -1,5 +1,6 @@
 import React from 'react';
 import Image from 'next/image';
+import Link from 'next/link';
 
 const WorkoutDataCard = ({ workoutData }) => {
     const {
@@ -19,6 +20,9 @@ const WorkoutDataCard = ({ workoutData }) => {
     } = workoutData;
 
     return (
+        <>
+
+        <Link href={`/workouts/${id}`} className="w-full"> 
 
         <div className="bg-[#121418] text-white rounded-2xl overflow-hidden border border-gray-800 shadow-lg w-full hover:border-gray-700 transition-all duration-300">
             <div className="relative w-full h-48 bg-gray-900">
@@ -76,6 +80,8 @@ const WorkoutDataCard = ({ workoutData }) => {
                 </div>
             </div>
         </div>
+        </Link>
+        </>
     );
 };
 

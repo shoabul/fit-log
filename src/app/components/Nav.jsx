@@ -1,12 +1,14 @@
 'use client';
 
 import Link from 'next/link';
-import React, { useState } from 'react';
+import React, { useState, useContext } from 'react';
 import Image from 'next/image';
+import { WorkoutContext } from '@/context/WorkoutContext';
 
 
 const Nav = () => {
-    const [activeMenu, setActiveMenu] = useState("workouts");
+    const [activeMenu, setActiveMenu] = useState("");
+    const { myPlan = [], savedWorkouts = [] } = useContext(WorkoutContext) || {};
 
     return (
         <nav className="h-14 border-b border-zinc-800 bg-[#0b0c0f] text-zinc-300">
@@ -15,7 +17,7 @@ const Nav = () => {
                 <Link href="/">
                     <div className="flex items-center gap-2 ">
 
-                        <Image href="/" src="/logo.png" alt="FitLog Logo" width={24} height={24} className="" />
+                        <Image src="/logo.png" alt="FitLog Logo" width={24} height={24} className="" />
 
                         <span className="font-bold tracking-wider text-white uppercase text-base">
                             FITLOG
@@ -55,7 +57,7 @@ const Nav = () => {
 
                     <div className="flex items-center gap-2 text-xs">
 
-                        <Link href="/">
+                        <Link href="/my-plan">
                             <span className="text-zinc-400">
                                 Plan
                             </span>
@@ -63,20 +65,20 @@ const Nav = () => {
 
 
                         <span className="flex h-4 w-4 items-center justify-center rounded-full bg-lime-400 text-[9px] font-bold text-black">
-                            0
+                            {myPlan.length}
                         </span>
                     </div>
 
 
                     <div className="flex items-center gap-2 text-xs">
-                        <Link href="/">
+                        <Link href="/my-plan">
                             <span className="text-zinc-400">
-                                Saved
+                                Saved 
                             </span>
                         </Link>
 
                         <span className="flex h-4 w-4 items-center justify-center rounded-full border border-zinc-700 text-[9px] text-zinc-400">
-                            0
+                            {savedWorkouts.length}
                         </span>
                     </div>
 

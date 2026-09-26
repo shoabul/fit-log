@@ -3,18 +3,6 @@ import WorkoutDataCard from "./components/WorkoutDataCard";
 import {getWorkoutsData} from "./lib/fetchApi";
 
 
-
-// export const getWorkoutsData = async () => {
-//   const res = await fetch("https://api.abcz.workers.dev/api/fitlog");
-
-//   if (!res.ok) {
-//     throw new Error("Failed to fetch workouts data");
-//   }
-
-//   const data = await res.json();
-//   return data;
-// };
-
 export default async function Home() {
   const workoutData = await getWorkoutsData();
   console.log(workoutData);
