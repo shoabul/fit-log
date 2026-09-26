@@ -28,10 +28,10 @@ const TodaysPlanButton = ({ workoutData }) => {
         onClick={handleMyPlan}
         type="button"
         disabled={isAdded}
-        className={`flex items-center gap-2.5 font-bold text-sm px-6 py-3 rounded-xl transition-all shadow-md active:scale-95 ${
+        className={`flex items-center gap-2.5 font-bold text-sm px-6 py-3 rounded-xl transition-all shadow-md  ${
           isAdded
             ? 'bg-[#d8fa90] text-gray-700  opacity-70'
-            : 'bg-[#bbf246] hover:bg-[#a3e635] text-black cursor-pointer'
+            : 'bg-[#bbf246] hover:bg-[#a3e635] active:scale-95 text-black cursor-pointer'
         }`}
       >
         <svg

@@ -4,10 +4,18 @@ import { useContext, useState } from 'react';
 import Link from 'next/link';
 import { WorkoutContext } from '@/context/WorkoutContext';
 import Image from 'next/image';
+import { toast } from 'react-toastify';
 
 export default function MyPlanPage() {
-    const { myPlan = [], savedWorkouts = [] } = useContext(WorkoutContext);
-    const [activeTab, setActiveTab] = useState("Today's Plan"); // "Today's Plan" or "Saved"
+    const {
+        myPlan = [],
+        savedWorkouts = [],
+        removeFromPlan,
+        markAsDone,
+        removeSavedWorkout,
+    } = useContext(WorkoutContext);
+
+    const [activeTab, setActiveTab] = useState("Today's Plan");
     const [sortBy, setSortBy] = useState('Duration');
 
     const activeList = activeTab === "Today's Plan" ? myPlan : savedWorkouts;
@@ -21,6 +29,21 @@ export default function MyPlanPage() {
         (acc, item) => acc + (parseInt(item.caloriesBurned) || 0),
         0
     );
+
+    const handleMarkDone = (workout) => {
+        markAsDone(workout);
+        toast.success(`"${workout.name || workout.title}" marked as done!`);
+    };
+
+    const handleRemove = (workout) => {
+        if (activeTab === "Today's Plan") {
+            removeFromPlan(workout.id);
+            toast.error(`Removed "${workout.name || workout.title}" from Today's Plan`);
+        } else {
+            removeSavedWorkout(workout.id);
+            toast.error(`Removed "${workout.name || workout.title}" from Saved Workouts`);
+        }
+    };
 
     const sortedList = [...activeList].sort((a, b) => {
         if (sortBy === 'Duration') {
@@ -36,7 +59,7 @@ export default function MyPlanPage() {
     });
 
     return (
-        <div className="w-full px-20 min-h-screen bg-[#0b0c0f] text-white p-6  font-sans">
+        <div className="w-full px-20 min-h-screen bg-[#0b0c0f] text-white p-6 font-sans">
             <div className="mb-6">
                 <h1 className="text-3xl font-extrabold uppercase tracking-wide text-white mb-1">
                     MY PLAN
@@ -79,8 +102,8 @@ export default function MyPlanPage() {
                     <button
                         onClick={() => setActiveTab("Today's Plan")}
                         className={`px-6 py-2 rounded-lg text-sm font-semibold transition-all ${activeTab === "Today's Plan"
-                            ? 'bg-[#1e2330] text-white'
-                            : 'text-gray-400 hover:text-white'
+                                ? 'bg-[#1e2330] text-white'
+                                : 'text-gray-400 hover:text-white'
                             }`}
                     >
                         Today's Plan
@@ -88,8 +111,8 @@ export default function MyPlanPage() {
                     <button
                         onClick={() => setActiveTab('Saved')}
                         className={`px-6 py-2 rounded-lg text-sm font-semibold transition-all ${activeTab === 'Saved'
-                            ? 'bg-[#1e2330] text-white'
-                            : 'text-gray-400 hover:text-white'
+                                ? 'bg-[#1e2330] text-white'
+                                : 'text-gray-400 hover:text-white'
                             }`}
                     >
                         Saved
@@ -188,10 +211,38 @@ export default function MyPlanPage() {
                                     </Link>
 
                                     {activeTab === "Today's Plan" && (
-                                        <button className="bg-[#b5ff38] hover:bg-[#a1e62c] text-black font-bold text-xs px-5 py-2.5 rounded-full transition shadow-sm">
+                                        <button
+                                            onClick={() => handleMarkDone(workout)}
+                                            className="bg-[#b5ff38] hover:bg-[#a1e62c] text-black font-bold text-xs px-5 py-2.5 rounded-full transition shadow-sm flex items-center gap-1.5"
+                                        >
+                                            <svg
+                                                className="w-3.5 h-3.5"
+                                                fill="none"
+                                                stroke="currentColor"
+                                                strokeWidth="2.5"
+                                                viewBox="0 0 24 24"
+                                            >
+                                                <path strokeLinecap="round" strokeLinejoin="round" d="M4.5 12.75l6 6 9-13.5" />
+                                            </svg>
                                             Mark as Done
                                         </button>
                                     )}
+
+                                    <button
+                                        onClick={() => handleRemove(workout)}
+                                        className="border border-[#1b1f2b] bg-[#161922] hover:bg-red-500/10 hover:border-red-500/40 text-gray-400 hover:text-red-400 p-2.5 rounded-full transition"
+                                        title="Remove"
+                                    >
+                                        <svg
+                                            className="w-4 h-4"
+                                            fill="none"
+                                            stroke="currentColor"
+                                            strokeWidth="2"
+                                            viewBox="0 0 24 24"
+                                        >
+                                            <path strokeLinecap="round" strokeLinejoin="round" d="M6 18L18 6M6 6l12 12" />
+                                        </svg>
+                                    </button>
                                 </div>
                             </div>
                         );
