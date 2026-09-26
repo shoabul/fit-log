@@ -33,8 +33,13 @@ export const WorkoutProvider = ({ children }) => {
       if (exists) return prev;
       return [...prev, workout];
     });
-    removeFromPlan(workout.id);
+    // removeFromPlan(workout.id);
   };
+
+  const isCompleted = (id) => {
+  if (!id) return false;
+  return completedWorkouts.some((item) => String(item.id) === String(id));
+};
 
   const saveForLater = (workout) => {
     if (isSaved(workout.id)) return;
@@ -54,6 +59,7 @@ export const WorkoutProvider = ({ children }) => {
         addToPlan,
         removeFromPlan,
         markAsDone,
+        isCompleted,
         saveForLater,
         removeSavedWorkout,
         isSaved,

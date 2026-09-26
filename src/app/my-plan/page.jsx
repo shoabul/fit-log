@@ -19,6 +19,7 @@ function MyPlanContent() {
         savedWorkouts = [],
         removeFromPlan,
         markAsDone,
+        isCompleted,
         removeSavedWorkout,
     } = useContext(WorkoutContext);
 
@@ -66,8 +67,8 @@ function MyPlanContent() {
         if (sortBy === 'Calories') {
             return (parseInt(b.caloriesBurned) || 0) - (parseInt(a.caloriesBurned) || 0);
         }
-        if (sortBy === 'Name') {
-            return (a.name|| '').localeCompare(b.name|| '');
+        if (sortBy === 'Rating') {
+            return (a.rating || '').localeCompare(b.rating || '');
         }
         return 0;
     });
@@ -116,8 +117,8 @@ function MyPlanContent() {
                     <button
                         onClick={() => handleTabChange("Today's Plan")}
                         className={`px-6 py-2 rounded-lg text-sm font-semibold transition-all ${activeTab === "Today's Plan"
-                                ? 'bg-[#1e2330] text-white'
-                                : 'text-gray-400 hover:text-white'
+                            ? 'bg-[#1e2330] text-white'
+                            : 'text-gray-400 hover:text-white'
                             }`}
                     >
                         Today's Plan
@@ -125,8 +126,8 @@ function MyPlanContent() {
                     <button
                         onClick={() => handleTabChange('Saved')}
                         className={`px-6 py-2 rounded-lg text-sm font-semibold transition-all ${activeTab === 'Saved'
-                                ? 'bg-[#1e2330] text-white'
-                                : 'text-gray-400 hover:text-white'
+                            ? 'bg-[#1e2330] text-white'
+                            : 'text-gray-400 hover:text-white'
                             }`}
                     >
                         Saved
@@ -142,7 +143,7 @@ function MyPlanContent() {
                     >
                         <option value="Duration">Duration</option>
                         <option value="Calories">Calories</option>
-                        <option value="Name">Name</option>
+                        <option value="Name">Rating</option>
                     </select>
                 </div>
             </div>
@@ -227,7 +228,11 @@ function MyPlanContent() {
                                     {activeTab === "Today's Plan" && (
                                         <button
                                             onClick={() => handleMarkDone(workout)}
-                                            className="bg-[#b5ff38] hover:bg-[#a1e62c] text-black font-bold text-xs px-5 py-2.5 rounded-full transition shadow-sm flex items-center gap-1.5"
+                                            disabled={isCompleted(workout.id)}
+                                            className={`font-bold text-xs px-5 py-2.5 rounded-full transition shadow-sm flex items-center gap-1.5 ${isCompleted(workout.id)
+                                                ? 'bg-[#1b1f2b] text-gray-400 opacity-70'
+                                                : 'bg-[#b5ff38] hover:bg-[#a1e62c] text-black cursor-pointer'
+                                                }`}
                                         >
                                             <svg
                                                 className="w-3.5 h-3.5"
@@ -238,7 +243,7 @@ function MyPlanContent() {
                                             >
                                                 <path strokeLinecap="round" strokeLinejoin="round" d="M4.5 12.75l6 6 9-13.5" />
                                             </svg>
-                                            Mark as Done
+                                            {isCompleted(workout.id) ? 'Completed' : 'Mark as Done'}
                                         </button>
                                     )}
 
