@@ -7,15 +7,14 @@ import { usePathname } from 'next/navigation';
 import { WorkoutContext } from '@/context/WorkoutContext';
 
 const Nav = () => {
-    const [activeMenu, setActiveMenu] = useState("");
+    const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
     const { myPlan = [], savedWorkouts = [] } = useContext(WorkoutContext) || {};
     
     const pathname = usePathname();
     const isHomePage = pathname === '/';
 
-    // Pure JavaScript event handler (no TypeScript type annotations)
     const handleWorkoutsClick = (e) => {
-        setActiveMenu("workouts");
+        setMobileMenuOpen(false);
 
         if (isHomePage) {
             e.preventDefault();
@@ -25,25 +24,42 @@ const Nav = () => {
     };
 
     return (
-        <nav className="h-14 border-b border-zinc-800 bg-[#0b0c0f] text-zinc-300">
-            <div className="mx-auto grid h-full w-full grid-cols-3 items-center px-20">
+        <nav className="border-b border-zinc-800/80 bg-[#0b0c0f] text-zinc-300 sticky top-0 z-50">
+            {/* max-w-[1600px] ব্যবহার করায় বড় স্ক্রিনে অনেক বেশি জায়গা পাবে */}
+            <div className="mx-auto flex h-14 max-w-[1600px] items-center justify-between px-4 sm:px-8 md:px-12 lg:px-16">
+                
+                {/* Logo & Mobile Menu Toggle */}
+                <div className="flex items-center gap-3">
+                    <button
+                        onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
+                        className="p-1 text-zinc-400 hover:text-white md:hidden focus:outline-none"
+                        aria-label="Toggle Menu"
+                    >
+                        <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            {mobileMenuOpen ? (
+                                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
+                            ) : (
+                                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 6h16M4 12h16M4 18h16" />
+                            )}
+                        </svg>
+                    </button>
 
-                <Link href="/">
-                    <div className="flex items-center gap-2">
-                        <Image src="/logo.png" alt="FitLog Logo" width={24} height={24} className="" />
+                    <Link href="/" className="flex items-center gap-2">
+                        <Image src="/logo.png" alt="FitLog Logo" width={24} height={24} className="object-contain" />
                         <span className="font-bold tracking-wider text-white uppercase text-base">
                             FITLOG
                         </span>
-                    </div>
-                </Link>
+                    </Link>
+                </div>
 
-                <div className="flex items-center justify-center gap-1">
+                {/* Desktop Navigation Links */}
+                <div className="hidden md:flex items-center justify-center gap-1">
                     <Link href="/#library" onClick={handleWorkoutsClick}>
                         <button
                             className={`rounded-full px-4 py-1.5 text-xs font-medium transition ${
-                                activeMenu === "workouts"
-                                    ? "bg-lime-500/10 text-lime-400"
-                                    : "text-zinc-500 hover:text-zinc-300"
+                                pathname === '/' || pathname.includes('#library')
+                                    ? "bg-lime-500/10 text-lime-400 border border-lime-500/20"
+                                    : "text-zinc-400 hover:text-zinc-200"
                             }`}
                         >
                             Workouts
@@ -52,11 +68,10 @@ const Nav = () => {
 
                     <Link href="/my-plan">
                         <button
-                            onClick={() => setActiveMenu("plan")}
                             className={`rounded-full px-4 py-1.5 text-xs font-medium transition ${
-                                activeMenu === "plan"
-                                    ? "bg-lime-500/10 text-lime-400"
-                                    : "text-zinc-500 hover:text-zinc-300"
+                                pathname.startsWith('/my-plan')
+                                    ? "bg-lime-500/10 text-lime-400 border border-lime-500/20"
+                                    : "text-zinc-400 hover:text-zinc-200"
                             }`}
                         >
                             My Plan
@@ -64,26 +79,43 @@ const Nav = () => {
                     </Link>
                 </div>
 
-                <div className="flex items-center justify-end gap-6">
-                    <div className="flex items-center gap-2 text-xs">
-                        <Link href="/my-plan?tab=plan">
-                            <span className="text-zinc-400">Plan</span>
-                        </Link>
-                        <span className="flex h-4 w-4 items-center justify-center rounded-full bg-lime-400 text-[9px] font-bold text-black">
+                {/* Right Side Badges */}
+                <div className="flex items-center gap-4 sm:gap-6">
+                    <Link href="/my-plan?tab=plan" className="flex items-center gap-1.5 text-xs hover:opacity-80 transition">
+                        <span className="text-zinc-400 font-medium">Plan</span>
+                        <span className="flex h-4 min-w-4 px-1 items-center justify-center rounded-full bg-lime-400 text-[9px] font-bold text-black">
                             {myPlan.length}
                         </span>
-                    </div>
+                    </Link>
 
-                    <div className="flex items-center gap-2 text-xs">
-                        <Link href="/my-plan?tab=saved">
-                            <span className="text-zinc-400">Saved</span>
-                        </Link>
-                        <span className="flex h-4 w-4 items-center justify-center rounded-full border border-zinc-700 text-[9px] text-zinc-400">
+                    <Link href="/my-plan?tab=saved" className="flex items-center gap-1.5 text-xs hover:opacity-80 transition">
+                        <span className="text-zinc-400 font-medium">Saved</span>
+                        <span className="flex h-4 min-w-4 px-1 items-center justify-center rounded-full border border-zinc-700 bg-zinc-900 text-[9px] text-zinc-300">
                             {savedWorkouts.length}
                         </span>
-                    </div>
+                    </Link>
                 </div>
             </div>
+
+            {/* Mobile Dropdown */}
+            {mobileMenuOpen && (
+                <div className="md:hidden border-b border-zinc-800 bg-[#0b0c0f] px-4 py-3 space-y-2">
+                    <Link href="/#library" onClick={handleWorkoutsClick} className="block">
+                        <div className={`px-3 py-2 rounded-lg text-sm font-medium ${
+                            pathname === '/' ? "bg-lime-500/10 text-lime-400" : "text-zinc-400"
+                        }`}>
+                            Workouts
+                        </div>
+                    </Link>
+                    <Link href="/my-plan" onClick={() => setMobileMenuOpen(false)} className="block">
+                        <div className={`px-3 py-2 rounded-lg text-sm font-medium ${
+                            pathname.startsWith('/my-plan') ? "bg-lime-500/10 text-lime-400" : "text-zinc-400"
+                        }`}>
+                            My Plan
+                        </div>
+                    </Link>
+                </div>
+            )}
         </nav>
     );
 };
