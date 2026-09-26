@@ -40,7 +40,7 @@ export default async function Home({ searchParams }) {
     <div className="min-h-screen bg-[#0b0c0f]">
       <Hero />
 
-      <section className="w-full mx-auto max-w-[1600px] px-4 sm:px-8 md:px-12 lg:px-16 py-8 sm:py-12 text-white font-sans">
+      <section id="library" className="w-full mx-auto max-w-[1600px] px-4 sm:px-8 md:px-12 lg:px-16 py-8 sm:py-12 text-white font-sans scroll-mt-20">
         <div className="mb-6 sm:mb-8 text-center md:text-left">
           <h1 className="text-2xl sm:text-3xl md:text-4xl font-extrabold uppercase tracking-wide text-white">
             THE LIBRARY

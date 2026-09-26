@@ -15,7 +15,7 @@ const WorkoutDataCard = ({ workoutData }) => {
     } = workoutData || {};
 
     return (
-        <div id="library" className="scroll-mt-24 w-full">
+        <div  className=" w-full">
             <Link href={`/workouts/${id}`} className="group block w-full">
                 <div className="bg-[#121418] text-white rounded-2xl overflow-hidden border border-zinc-800/80 shadow-lg w-full transition-all duration-300 group-hover:border-zinc-700 group-hover:-translate-y-1">
                     

@@ -205,6 +205,7 @@ function MyPlanContent() {
                                 duration,
                                 caloriesBurned,
                                 rating,
+                                isLoaded,
                             } = workout;
 
                             return (
