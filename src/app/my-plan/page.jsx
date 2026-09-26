@@ -1,12 +1,19 @@
 'use client';
 
-import { useContext, useState } from 'react';
+import { useContext, useState, Suspense } from 'react';
 import Link from 'next/link';
+import { useRouter, useSearchParams } from 'next/navigation';
 import { WorkoutContext } from '@/context/WorkoutContext';
 import Image from 'next/image';
 import { toast } from 'react-toastify';
 
-export default function MyPlanPage() {
+function MyPlanContent() {
+    const searchParams = useSearchParams();
+    const router = useRouter();
+
+    const currentTabParam = searchParams.get('tab');
+    const activeTab = currentTabParam === 'saved' ? 'Saved' : "Today's Plan";
+
     const {
         myPlan = [],
         savedWorkouts = [],
@@ -15,8 +22,15 @@ export default function MyPlanPage() {
         removeSavedWorkout,
     } = useContext(WorkoutContext);
 
-    const [activeTab, setActiveTab] = useState("Today's Plan");
     const [sortBy, setSortBy] = useState('Duration');
+
+    const handleTabChange = (tabName) => {
+        if (tabName === "Today's Plan") {
+            router.push('/my-plan?tab=plan');
+        } else {
+            router.push('/my-plan?tab=saved');
+        }
+    };
 
     const activeList = activeTab === "Today's Plan" ? myPlan : savedWorkouts;
 
@@ -32,16 +46,16 @@ export default function MyPlanPage() {
 
     const handleMarkDone = (workout) => {
         markAsDone(workout);
-        toast.success(`"${workout.name || workout.title}" marked as done!`);
+        toast.success(`"${workout.name}" Done`);
     };
 
     const handleRemove = (workout) => {
         if (activeTab === "Today's Plan") {
             removeFromPlan(workout.id);
-            toast.error(`Removed "${workout.name || workout.title}" from Today's Plan`);
+            toast.error(`Removed "${workout.name}" from Today's Plan`);
         } else {
             removeSavedWorkout(workout.id);
-            toast.error(`Removed "${workout.name || workout.title}" from Saved Workouts`);
+            toast.error(`Removed "${workout.name}" from Saved Workouts`);
         }
     };
 
@@ -53,7 +67,7 @@ export default function MyPlanPage() {
             return (parseInt(b.caloriesBurned) || 0) - (parseInt(a.caloriesBurned) || 0);
         }
         if (sortBy === 'Name') {
-            return (a.name || a.title || '').localeCompare(b.name || b.title || '');
+            return (a.name|| '').localeCompare(b.name|| '');
         }
         return 0;
     });
@@ -100,7 +114,7 @@ export default function MyPlanPage() {
                 {/* Tab Buttons */}
                 <div className="bg-[#111319] border border-[#1b1f2b] p-1 rounded-xl flex items-center gap-1">
                     <button
-                        onClick={() => setActiveTab("Today's Plan")}
+                        onClick={() => handleTabChange("Today's Plan")}
                         className={`px-6 py-2 rounded-lg text-sm font-semibold transition-all ${activeTab === "Today's Plan"
                                 ? 'bg-[#1e2330] text-white'
                                 : 'text-gray-400 hover:text-white'
@@ -109,7 +123,7 @@ export default function MyPlanPage() {
                         Today's Plan
                     </button>
                     <button
-                        onClick={() => setActiveTab('Saved')}
+                        onClick={() => handleTabChange('Saved')}
                         className={`px-6 py-2 rounded-lg text-sm font-semibold transition-all ${activeTab === 'Saved'
                                 ? 'bg-[#1e2330] text-white'
                                 : 'text-gray-400 hover:text-white'
@@ -250,5 +264,13 @@ export default function MyPlanPage() {
                 </div>
             )}
         </div>
+    );
+}
+
+export default function MyPlanPage() {
+    return (
+        <Suspense fallback={<div className="min-h-screen bg-[#0b0c0f] text-white p-6">Loading...</div>}>
+            <MyPlanContent />
+        </Suspense>
     );
 }

@@ -4,12 +4,23 @@ import { WorkoutContext } from '@/context/WorkoutContext';
 import { toast } from 'react-toastify';
 
 const TodaysPlanButton = ({ workoutData }) => {
-  const { addToPlan } = useContext(WorkoutContext) || {};
+
+  const { addToPlan, isInPlan } = useContext(WorkoutContext) || {};
+
+  const isAlreadyInPlan = isInPlan ? isInPlan(workoutData?.id) : false;
+
   const [isAdded, setIsAdded] = useState(false);
+
+  const isDisabled = isAlreadyInPlan || isAdded;
 
   const handleMyPlan = () => {
     if (!workoutData) {
       toast.error("Workout data is missing!");
+      return;
+    }
+
+    if (isAlreadyInPlan) {
+      toast.info("Already added to today's plan");
       return;
     }
 
@@ -27,10 +38,10 @@ const TodaysPlanButton = ({ workoutData }) => {
       <button 
         onClick={handleMyPlan}
         type="button"
-        disabled={isAdded}
+        disabled={isDisabled}
         className={`flex items-center gap-2.5 font-bold text-sm px-6 py-3 rounded-xl transition-all shadow-md  ${
-          isAdded
-            ? 'bg-[#d8fa90] text-gray-700  opacity-70'
+          isDisabled
+            ? 'bg-[#d8fa90] text-gray-700 opacity-70'
             : 'bg-[#bbf246] hover:bg-[#a3e635] active:scale-95 text-black cursor-pointer'
         }`}
       >
@@ -41,13 +52,13 @@ const TodaysPlanButton = ({ workoutData }) => {
           strokeWidth="2.5"
           viewBox="0 0 24 24"
         >
-          {isAdded ? (
+          {isDisabled ? (
             <path strokeLinecap="round" strokeLinejoin="round" d="M5 13l4 4L19 7" />
           ) : (
             <rect x="3" y="3" width="18" height="18" rx="2" />
           )}
         </svg>
-        {isAdded ? "Added to today's plan" : "Add to today's plan"}
+        {isDisabled ? "Added to today's plan" : "Add to today's plan"}
       </button>
     </div>
   );

@@ -4,8 +4,13 @@ import { WorkoutContext } from '@/context/WorkoutContext';
 import { toast } from 'react-toastify';
 
 const SaveForLatterButton = ({ workoutData }) => {
-    const { saveForLater } = useContext(WorkoutContext) || {};
+    const { saveForLater, isSaved: checkIsSaved } = useContext(WorkoutContext) || {};
+
+    const isAlreadySaved = checkIsSaved ? checkIsSaved(workoutData?.id) : false;
+
     const [isSaved, setIsSaved] = useState(false);
+
+    const isDisabled = isAlreadySaved || isSaved;
 
     const handleSave = () => {
         if (!workoutData) {
@@ -13,6 +18,12 @@ const SaveForLatterButton = ({ workoutData }) => {
             toast.error("Workout data is missing!");
             return;
         }
+
+        if (isAlreadySaved) {
+            toast.info("Already saved for later!");
+            return;
+        }
+
         if (saveForLater) {
             saveForLater(workoutData);
             setIsSaved(true);
@@ -29,21 +40,22 @@ const SaveForLatterButton = ({ workoutData }) => {
             <button 
                 onClick={handleSave}
                 type="button"
-                disabled={isSaved}
+
+                disabled={isDisabled}
                 className={`flex items-center gap-2.5 text-sm font-semibold px-6 py-3 rounded-xl transition-all border ${
-                    isSaved
+                    isDisabled
                         ? 'bg-zinc-900 border-zinc-800 text-zinc-500 opacity-75 shadow-none'
                         : 'bg-[#121316] hover:bg-zinc-800 text-zinc-200 border-zinc-800 active:scale-95 cursor-pointer shadow-sm'
                 }`}
             >
                 <svg
                     className="w-4 h-4"
-                    fill={isSaved ? "currentColor" : "none"}
+                    fill={isDisabled ? "currentColor" : "none"}
                     stroke="currentColor"
                     strokeWidth="2"
                     viewBox="0 0 24 24"
                 >
-                    {isSaved ? (
+                    {isDisabled ? (
                         <path
                             strokeLinecap="round"
                             strokeLinejoin="round"
@@ -57,7 +69,7 @@ const SaveForLatterButton = ({ workoutData }) => {
                         />
                     )}
                 </svg>
-                {isSaved ? "Saved for later" : "Save for later"}
+                {isDisabled ? "Saved for later" : "Save for later"}
             </button>
         </div>
     );

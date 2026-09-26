@@ -1,5 +1,5 @@
 'use client';
-import { createContext, useState } from 'react';
+import { createContext, useState, useEffect } from 'react';
 
 export const WorkoutContext = createContext();
 
@@ -8,31 +8,41 @@ export const WorkoutProvider = ({ children }) => {
   const [savedWorkouts, setSavedWorkouts] = useState([]);
   const [completedWorkouts, setCompletedWorkouts] = useState([]);
 
+  const isSaved = (id) => {
+    if (!id) return false;
+    return savedWorkouts.some((item) => String(item.id) === String(id));
+  };
+
+  const isInPlan = (id) => {
+    if (!id) return false;
+    return myPlan.some((item) => String(item.id) === String(id));
+  };
+
   const addToPlan = (workout) => {
-    setMyPlan((prev) => {
-      if (prev.some((item) => item.id === workout.id)) return prev;
-      return [...prev, workout];
-    });
+    if (isInPlan(workout.id)) return;
+    setMyPlan((prev) => [...prev, workout]);
   };
 
   const removeFromPlan = (id) => {
-    setMyPlan((prev) => prev.filter((item) => item.id !== id));
+    setMyPlan((prev) => prev.filter((item) => String(item.id) !== String(id)));
   };
 
   const markAsDone = (workout) => {
-    setCompletedWorkouts((prev) => [...prev, workout]);
+    setCompletedWorkouts((prev) => {
+      const exists = prev.some((item) => String(item.id) === String(workout.id));
+      if (exists) return prev;
+      return [...prev, workout];
+    });
     removeFromPlan(workout.id);
   };
 
   const saveForLater = (workout) => {
-    setSavedWorkouts((prev) => {
-      if (prev.some((item) => item.id === workout.id)) return prev;
-      return [...prev, workout];
-    });
+    if (isSaved(workout.id)) return;
+    setSavedWorkouts((prev) => [...prev, workout]);
   };
 
   const removeSavedWorkout = (id) => {
-    setSavedWorkouts((prev) => prev.filter((item) => item.id !== id));
+    setSavedWorkouts((prev) => prev.filter((item) => String(item.id) !== String(id)));
   };
 
   return (
@@ -46,6 +56,8 @@ export const WorkoutProvider = ({ children }) => {
         markAsDone,
         saveForLater,
         removeSavedWorkout,
+        isSaved,
+        isInPlan,
       }}
     >
       {children}

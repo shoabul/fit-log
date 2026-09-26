@@ -60,7 +60,7 @@ const Nav = () => {
 
                     <div className="flex items-center gap-2 text-xs">
 
-                        <Link href="/my-plan">
+                        <Link href="/my-plan?tab=plan">
                             <span className="text-zinc-400">
                                 Plan
                             </span>
@@ -74,7 +74,7 @@ const Nav = () => {
 
 
                     <div className="flex items-center gap-2 text-xs">
-                        <Link href="/my-plan">
+                        <Link href="/my-plan?tab=saved">
                             <span className="text-zinc-400">
                                 Saved 
                             </span>
