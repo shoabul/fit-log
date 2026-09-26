@@ -27,9 +27,12 @@ const Nav = () => {
 
 
                 <div className="flex items-center justify-center gap-1">
-                    <Link href="/workouts">
+                    
                         <button
-                            onClick={() => setActiveMenu("workouts")}
+                            onClick={() => {
+                                document.getElementById('library')?.scrollIntoView({ behavior: 'smooth' });
+                                setActiveMenu("workouts")
+                            }}
                             className={`rounded-full px-4 py-1.5 text-xs font-medium transition ${activeMenu === "workouts"
                                 ? "bg-lime-500/10 text-lime-400"
                                 : "text-zinc-500 hover:text-zinc-300"
@@ -37,7 +40,7 @@ const Nav = () => {
                         >
                             Workouts
                         </button>
-                    </Link>
+                    
                     <Link href="/my-plan">
                         <button
                             onClick={() => setActiveMenu("plan")}

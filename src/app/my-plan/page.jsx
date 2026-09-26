@@ -142,7 +142,7 @@ export default function MyPlanPage() {
                         Browse the library and add a lift to get today moving.
                     </p>
                     <Link
-                        href="/workouts"
+                        href="/#library"
                         className="bg-[#b5ff38] hover:bg-[#a1e62c] text-black font-bold text-sm px-6 py-3 rounded-full transition-colors shadow-md"
                     >
                         Go to workouts

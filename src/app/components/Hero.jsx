@@ -1,3 +1,5 @@
+'use client'
+
 import React from 'react';
 import Image from 'next/image';
 
@@ -27,7 +29,12 @@ const Hero = () => {
 
 
                     <div className="pt-2">
-                        <button className="bg-[#adff2f] hover:bg-[#9be327] text-black font-bold text-xs md:text-sm tracking-wider uppercase py-3.5 px-6 rounded-lg transition-colors duration-200 cursor-pointer shadow-md">
+                        <button
+                            onClick={() => {
+                                document.getElementById('library')?.scrollIntoView({ behavior: 'smooth' });
+                            }}
+                            className="bg-[#adff2f] hover:bg-[#9be327] text-black font-bold text-xs md:text-sm tracking-wider uppercase py-3.5 px-6 rounded-lg transition-colors duration-200 cursor-pointer shadow-md"
+                        >
                             BROWSE WORKOUTS
                         </button>
                     </div>
