@@ -25,10 +25,9 @@ const Nav = () => {
 
     return (
         <nav className="border-b border-zinc-800/80 bg-[#0b0c0f] text-zinc-300 sticky top-0 z-50">
-            {/* max-w-[1600px] ব্যবহার করায় বড় স্ক্রিনে অনেক বেশি জায়গা পাবে */}
+
             <div className="mx-auto flex h-14 max-w-[1600px] items-center justify-between px-4 sm:px-8 md:px-12 lg:px-16">
                 
-                {/* Logo & Mobile Menu Toggle */}
                 <div className="flex items-center gap-3">
                     <button
                         onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
@@ -52,7 +51,6 @@ const Nav = () => {
                     </Link>
                 </div>
 
-                {/* Desktop Navigation Links */}
                 <div className="hidden md:flex items-center justify-center gap-1">
                     <Link href="/#library" onClick={handleWorkoutsClick}>
                         <button
@@ -79,7 +77,6 @@ const Nav = () => {
                     </Link>
                 </div>
 
-                {/* Right Side Badges */}
                 <div className="flex items-center gap-4 sm:gap-6">
                     <Link href="/my-plan?tab=plan" className="flex items-center gap-1.5 text-xs hover:opacity-80 transition">
                         <span className="text-zinc-400 font-medium">Plan</span>
@@ -97,7 +94,6 @@ const Nav = () => {
                 </div>
             </div>
 
-            {/* Mobile Dropdown */}
             {mobileMenuOpen && (
                 <div className="md:hidden border-b border-zinc-800 bg-[#0b0c0f] px-4 py-3 space-y-2">
                     <Link href="/#library" onClick={handleWorkoutsClick} className="block">

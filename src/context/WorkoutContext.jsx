@@ -51,7 +51,7 @@ export const WorkoutProvider = ({ children }) => {
   };
 
   const addToPlan = (workout) => {
-    if (isInPlan(workout.id)) return;
+    if (!workout || isInPlan(workout.id)) return;
     setMyPlan((prev) => [...prev, workout]);
   };
 
@@ -60,6 +60,7 @@ export const WorkoutProvider = ({ children }) => {
   };
 
   const markAsDone = (workout) => {
+    if (!workout) return;
     setCompletedWorkouts((prev) => {
       const exists = prev.some((item) => String(item.id) === String(workout.id));
       if (exists) return prev;
@@ -73,7 +74,7 @@ export const WorkoutProvider = ({ children }) => {
   };
 
   const saveForLater = (workout) => {
-    if (isSaved(workout.id)) return;
+    if (!workout || isSaved(workout.id)) return;
     setSavedWorkouts((prev) => [...prev, workout]);
   };
 
@@ -98,7 +99,6 @@ export const WorkoutProvider = ({ children }) => {
         isLoaded,
       }}
     >
-      
       {!isLoaded ? (
         <div className="w-full min-h-screen bg-[#0b0c0f] text-white flex items-center justify-center">
           <div className="animate-pulse text-zinc-400 text-sm">Loading...</div>

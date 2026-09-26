@@ -6,17 +6,32 @@ import SaveForLatterButton from '@/app/components/SaveForLatterButton';
 
 const WorkoutDetailPage = async ({ params }) => {
   const resolvedParams = await params;
+  const targetId = resolvedParams?.id;
 
-  const fetchedData = await getWorkoutsData(resolvedParams.id);
+  const response = await getWorkoutsData();
 
-  const workoutData = Array.isArray(fetchedData)
-    ? fetchedData.find((item) => String(item.id) === String(resolvedParams.id))
-    : fetchedData;
+
+  let allWorkouts = [];
+  if (Array.isArray(response)) {
+    allWorkouts = response;
+  } else if (response && Array.isArray(response.data)) {
+    allWorkouts = response.data;
+  }
+
+
+  const workoutData = allWorkouts.find(
+    (item) => String(item.id) === String(targetId)
+  );
 
   if (!workoutData) {
     return (
-      <div className="min-h-screen bg-[#0b0c0f] text-white flex items-center justify-center p-4">
-        <p className="text-zinc-400 text-sm">Workout details not found!</p>
+      <div className="min-h-screen bg-[#0b0c0f] text-white flex flex-col items-center justify-center p-4">
+        <div className="border border-red-500/20 bg-red-950/10 rounded-2xl p-8 text-center max-w-md">
+          <p className="text-red-400 font-semibold text-base mb-1">Workout details not found!</p>
+          <p className="text-zinc-500 text-xs">
+            Unable to fetch data for this workout or the ID is invalid.
+          </p>
+        </div>
       </div>
     );
   }

@@ -8,9 +8,16 @@ export default async function Home({ searchParams }) {
   const search = params?.search || '';
   const sortBy = params?.sortBy || 'default';
 
-  const rawWorkoutData = await getWorkoutsData();
+  const response = await getWorkoutsData();
 
-  let filteredData = (rawWorkoutData || []).filter((item) => {
+  let rawWorkoutData = [];
+  if (Array.isArray(response)) {
+    rawWorkoutData = response;
+  } else if (response && Array.isArray(response.data)) {
+    rawWorkoutData = response.data;
+  }
+
+  let filteredData = rawWorkoutData.filter((item) => {
     if (!search.trim()) return true;
     const query = search.toLowerCase().trim();
 
@@ -61,7 +68,7 @@ export default async function Home({ searchParams }) {
         ) : (
           <div className="border border-dashed border-zinc-800 rounded-2xl p-12 text-center bg-[#121418]/40">
             <p className="text-zinc-400 text-sm">
-              No workouts found matching `${search}`
+              {search ? `No workouts found matching "${search}"` : "Unable to fetch workouts right now."}
             </p>
           </div>
         )}

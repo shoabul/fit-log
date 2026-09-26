@@ -8,7 +8,6 @@ const Hero = () => {
         <section className="w-full mx-auto max-w-[1600px] px-4 sm:px-8 md:px-12 lg:px-16 py-6 sm:py-8">
             <div className="w-full bg-[#121418] text-white rounded-2xl p-6 sm:p-10 lg:p-14 flex flex-col-reverse md:flex-row items-center justify-between gap-8 md:gap-12 border border-zinc-800/80 shadow-2xl">
 
-                {/* Left Side Info */}
                 <div className="flex-1 space-y-4 sm:space-y-6 text-center md:text-left">
                     <span className="inline-block text-xs sm:text-sm font-bold tracking-wider text-[#adff2f] uppercase">
                         WORKOUT LIBRARY
@@ -36,7 +35,6 @@ const Hero = () => {
                     </div>
                 </div>
 
-                {/* Right Side Image */}
                 <div className="flex-1 flex justify-center md:justify-end w-full">
                     <div className="relative w-full max-w-[360px] sm:max-w-[480px] lg:max-w-[560px] aspect-4/3 flex items-center justify-center">
                         <Image

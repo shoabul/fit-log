@@ -21,6 +21,7 @@ function MyPlanContent() {
         markAsDone,
         isCompleted,
         removeSavedWorkout,
+        hasError = false,
     } = useContext(WorkoutContext);
 
     const [searchQuery, setSearchQuery] = useState('');
@@ -61,7 +62,6 @@ function MyPlanContent() {
         }
     };
 
-
     const sortedList = activeList
     .filter((item) => {
         if (!searchQuery.trim()) return true;
@@ -100,6 +100,21 @@ function MyPlanContent() {
                         Cap of five lifts for today. Finish them, then load more.
                     </p>
                 </div>
+
+                {hasError && (
+                    <div className="mb-6 p-4 border border-red-500/20 bg-red-950/20 rounded-2xl text-center sm:text-left flex flex-col sm:flex-row items-center justify-between gap-3">
+                        <div>
+                            <p className="text-red-400 font-semibold text-sm">Unable to connect to workout server.</p>
+                            <p className="text-zinc-400 text-xs">Some workout details might be out of sync or unavailable.</p>
+                        </div>
+                        <button 
+                            onClick={() => window.location.reload()} 
+                            className="text-xs bg-red-500/10 hover:bg-red-500/20 text-red-300 border border-red-500/30 px-3 py-1.5 rounded-lg transition"
+                        >
+                            Retry
+                        </button>
+                    </div>
+                )}
 
                 <div className="bg-[#121418] border border-zinc-800/80 rounded-2xl p-4 sm:p-6 mb-8 grid grid-cols-1 sm:grid-cols-3 divide-y sm:divide-y-0 sm:divide-x divide-zinc-800/80 gap-4 sm:gap-0 shadow-lg">
                     <div className="pt-2 sm:pt-0 sm:px-6 first:pl-0 text-center sm:text-left">
@@ -152,9 +167,7 @@ function MyPlanContent() {
                         </button>
                     </div>
 
-
                     <div className="flex flex-col sm:flex-row items-center gap-2">
-
                         <input
                             type="text"
                             placeholder="Search name or muscle..."
@@ -205,7 +218,6 @@ function MyPlanContent() {
                                 duration,
                                 caloriesBurned,
                                 rating,
-                                isLoaded,
                             } = workout;
 
                             return (
@@ -213,7 +225,6 @@ function MyPlanContent() {
                                     key={id}
                                     className="bg-[#121418] border border-zinc-800/80 rounded-2xl p-4 flex flex-col md:flex-row items-center justify-between gap-4 transition hover:border-zinc-700"
                                 >
-                                    {/* Left Side Info */}
                                     <div className="flex flex-col sm:flex-row items-center gap-4 w-full md:w-auto text-center sm:text-left">
                                         <div className="w-full sm:w-28 h-36 sm:h-20 rounded-xl overflow-hidden bg-zinc-900 flex-shrink-0 relative">
                                             <Image
@@ -262,7 +273,7 @@ function MyPlanContent() {
                                                 disabled={isCompleted(workout.id)}
                                                 className={`flex-1 sm:flex-none font-bold text-xs px-4 py-2.5 rounded-full transition shadow-sm flex items-center justify-center gap-1.5 ${
                                                     isCompleted(workout.id)
-                                                        ? 'bg-zinc-800/80 text-zinc-500 opacity-70 cursor-not-allowed'
+                                                        ? 'bg-zinc-800/80 text-zinc-500 opacity-70'
                                                         : 'bg-[#adff2f] hover:bg-[#9be327] text-black cursor-pointer'
                                                 }`}
                                             >
